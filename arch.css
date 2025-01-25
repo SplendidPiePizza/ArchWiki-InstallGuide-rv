@@ -1,0 +1,37 @@
+body {
+    background: linear-gradient(135deg, #363636, #575757); 
+    color: white;
+    font-family: arial;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    font-family: arial;
+}
+
+ pre {
+    background-color: rgb(53, 53, 53);
+    height: auto;
+    padding: 5px;
+    border: 1px solid #bcd;
+    overflow: auto;
+    word-break: break-all;
+    white-space: pre-wrap !important;
+    text-align: center;
+  }
+  
+  div.note {
+    background-color: #ddf;
+    border-color: #bbd;
+    color: black;
+    margin: 0.5em 0;
+    padding: 0.3em;
+    font-family: arial;
+  }
+
+  code {
+    color: rgb(255, 255, 255);
+  }
+
+strong {
+
+}

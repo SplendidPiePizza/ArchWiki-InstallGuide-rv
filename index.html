@@ -1,0 +1,318 @@
+<link rel="stylesheet" href="arch.css">
+
+<h1>Installation guide</h1>
+
+<p>This document is a guide for installing Arch Linux using the live system booted from an installation medium made from an official installation image.
+
+    <p>
+        Arch Linux should run on any x86_64-compatible machine with a minimum of 512 MiB RAM, though more memory is needed to boot the live system for installation.
+    </p>
+
+    <p>
+        A basic installation should take less than 2 GiB of disk space. As the installation process needs to retrieve packages from a remote repository, this guide assumes a working internet connection is available. 
+    </p>
+
+    <h2>Acquire an installation image</h2>
+
+<p>
+    Visit the Download page and, depending on how you want to boot, acquire the ISO file or a netboot image, and the respective PGP signature. 
+</p>
+
+<h2>Verify signature</h2>
+
+<p>
+    It is recommended to verify the image signature before use, especially when downloading from an HTTP mirror, where downloads are generally prone to be intercepted to serve malicious images.
+</p>
+
+<p>On a system with GnuPG installed, do this by downloading the ISO PGP signature (under Checksums in the page Download) to the ISO directory, and verifying it with:</p>
+
+<pre><code>$ gpg --keyserver-options auto-key-retrieve --verify archlinux-version-x86_64.iso.sig</code></pre>
+
+<p>Alternatively, from an existing Arch Linux installation run:
+</p>
+
+<pre>
+    <code>
+        $ pacman-key -v archlinux-version-x86_64.iso.sig
+    </code>
+</pre>
+<h2>Prepare an installation medium</h2>
+
+<p>
+    The ISO can be supplied to the target machine via a USB flash drive, an optical disc or a network with PXE: follow the appropriate article to prepare yourself an installation medium from the ISO file.
+</p>
+
+<p>The ISO can be supplied to the target machine via a USB flash drive, an optical disc or a network with PXE: follow the appropriate article to prepare yourself an installation medium from the ISO file.</p>
+
+<h1>Booting The Live Environment</h1>
+<strong>NOTE:</strong> <span>    Arch Linux installation images do not support Secure Boot. You will need to disable Secure Boot to boot the installation medium. If desired, Secure Boot can be set up after completing the installation.</span>
+
+
+<p>When the installation menu appears, select Arch Linux install medium and press Enter to enter the installation environment.</p>
+
+<p>If your using a netboot, choose a geographically close mirror from Mirror menu, then select Boot Arch Linux and press Enter. </p>
+
+
+<h1>Set the console keyboard layout and font</h1>
+
+<p>Set the console keyboard layout and font</p>
+
+<pre><code># localectl list-keymaps</code></pre>
+
+
+<p>To set the keyboard layout, pass its name to loadkeys(1). For example, to set a German keyboard layout:</p>
+
+<pre><code># loadkeys de-latin1</code></pre>
+
+<p>Console fonts are located in /usr/share/kbd/consolefonts/ and can likewise be set with <code>setfont(8)</code> omitting the path and file extension. For example, to use one of the largest fonts suitable for HiDPI screens, run:</p>
+
+<pre><code># setfont ter-132b
+</code></pre>
+
+<h1>Verify the boot mode</h1>
+
+<p>To verify the boot mode, check the UEFI bitness:</p>
+
+<pre><code># cat /sys/firmware/efi/fw_platform_size</code></pre>
+
+<p>
+    If the command returns 64, then the system is booted in UEFI mode and has a 64-bit x64 UEFI. If the command returns 32, then the system is booted in UEFI mode and has a 32-bit IA32 UEFI; while this is supported, it will limit the boot loader choice to systemd-boot and GRUB. If the file does not exist, the system may be booted in BIOS (or CSM) mode.
+</p>
+
+<h1>Connect to the internet</h1>
+
+<p>To set up a network connection in the live environment, go through the following steps:</p>
+
+    <p>Ensure your network interface is listed and enabled, for example with <code>ip-link(8)</code>:</p>
+
+    <pre><code># ip link</code></pre>
+
+    <p>For wireless and WWAN, make sure the card is not blocked with rfkill.
+        Connect to the network:</p>
+        <ul>
+
+        <li>Ethernet—plug in the cable.</li>
+        <li>Wi-Fi—authenticate to the wireless network using iwctl.</li>
+        <li>Mobile broadband modem—connect to the mobile network with the mmcli utility.
+            Configure your network connection:</li>
+        <li>DHCP: dynamic IP address and DNS server assignment (provided by systemd-networkd and systemd-resolved) should work out of the box for Ethernet, WLAN, and WWAN network interfaces</li>
+        <li>Static IP address:
+            The connection may be verified with ping:</li>
+            <pre><code># ping archlinux.org</code></pre>
+
+</ul>
+
+    
+<h1>Update The System Clock</h1>
+
+<p>In the live environment systemd-timesyncd is enabled by default and time will be synced automatically once a connection to the internet is established.</p>
+
+<p>Use <code>timedatectl(1)</code> to ensure the system clock is synchronized:</p>
+
+<pre><code># timedatectl</code></pre>
+
+<h1>Partition the disks</h1>
+
+<p>When recognized by the live system, disks are assigned to a block device such as <code>/dev/sda</code>, <code>/dev/nvme0n1</code> or <code>/dev/mmcblk0</code>. To identify these devices, use <code>lsblk</code> or <code>fdisk</code></p>
+
+<pre><code># fdisk -l</code></pre>
+
+<p>Results ending in rom, loop or airootfs may be ignored. mmcblk* devices ending in rpbm, boot0 and boot1 can be ignored.</p> 
+
+<p>Use a partitioning tool like fdisk to modify partition tables. For example:</p>
+
+<pre><code># fdisk /dev/the_disk_to_be_partitioned</code></pre>
+
+<p>Format the partitions</p>
+
+<p>Once the partitions have been created, each newly created partition must be formatted with an appropriate file system.</p>
+
+<p>For example, to create an Ext4 file system on /dev/root_partition, run:</p>
+
+<pre><code># mkfs.ext4 /dev/root_partition</code></pre>
+
+<p>If you created a partition for swap, initialize it with <code>mkswap(8)</code>:</p>
+
+<pre><code># mkswap /dev/swap_partition</code></pre>
+
+<p>If you created an EFI system partition, format it to FAT32 using <code>mkfs.fat(8)</code>.</p>
+
+<p>Mount the file systems</p>
+
+<p>Mount the root volume to /mnt. For example, if the root volume is <code>/dev/root_partition</code>:</p>
+
+<p>Create any remaining mount points under /mnt (such as /mnt/boot for /boot) and mount the volumes in their corresponding hierarchical order. 
+</p>
+
+<p>For UEFI systems, mount the EFI system partition:</p>
+
+<pre><code># mount --mkdir /dev/efi_system_partition /mnt/boot</code></pre>
+
+<p>If you created a swap volume, enable it with <code>swapon(8)</code>:</p>
+
+<pre><code>
+    # swapon /dev/swap_partition
+</code></pre>
+<p>genfstab will later detect mounted file systems and swap space. </p>
+
+<h3>Installation</h3>
+
+<h2>Select the mirrors</h2>
+
+<p>Packages to be installed must be downloaded from mirror servers, which are defined in <code>/etc/pacman.d/mirrorlist</code>. On the live system, after connecting to the internet, reflector updates the mirror list by choosing 20 most recently synchronized HTTPS mirrors and sorting them by download rate.</p>
+
+<p>The higher a mirror is placed in the list, the more priority it is given when downloading a package. You may want to inspect the file to see if it is satisfactory. If it is not, edit the file accordingly, and move the geographically closest mirrors to the top of the list, although other criteria should be taken into account.</p>
+
+<p>This file will later be copied to the new system by pacstrap, so it is worth getting right. </p>
+
+<h2>Install Essential Packages</h2>
+<p>Use the <code>pacstrap(8)</code> script to install the base package, Linux kernel and firmware for common hardware: </p>
+
+<pre><code># pacstrap -K /mnt base linux linux-firmware</code></pre>
+<h5>Tips</h5>
+<li>You can substitute linux with a kernel package of your choice, or you could omit it entirely when installing in a container.</li>
+<li>You could omit the installation of the firmware package when installing in a virtual machine or container.</li>
+</ul>
+<p>The base package does not include all tools from the live installation, </p>
+<p>so installing more packages may be necessary for a fully functional base system. </p>
+<p>To install other packages or package groups, append the names to the pacstrap command above (space separated) or use pacman to install them while chrooted into the new system. In particular, consider installing:</p>
+
+<ul>
+
+    <li>CPU microcode updates—amd-ucode or intel-ucode—for hardware bug and security fixes,</li>
+    <li>userspace utilities for file systems that will be used on the system—for the purposes of e.g. file system creation and fsck,</li>
+    <li>utilities for accessing and managing RAID or LVM if they will be used on the system,</li>
+    <li>specific firmware for other devices not included in linux-firmware (e.g. sof-firmware for onboard audio, linux-firmware-marvell for Marvell wireless and any of the multiple firmware packages for Broadcom wireless),</li>
+    <li>software necessary for networking (e.g. a network manager or a standalone DHCP client, authentication software for Wi-Fi, ModemManager for mobile broadband connections),</li>
+    <li>a console text editor (e.g nano) to allow editing configuration files from the console,</li>
+    <li>packages for accessing documentation in man and info pages: man-db, man-pages and texinfo.</li>
+
+</ul>
+
+<p>For comparison, packages available in the live system can be found in <a href="pkglist.html">Pkglist</a> </p>
+
+<h3>Configure the system</h3>
+
+<h4>Fstab</h4>
+
+<p>Generate an fstab file (use -U or -L to define by UUID or labels, respectively):</p>
+
+<pre><code># genfstab -U /mnt >> /mnt/etc/fstab</code></pre>
+
+<p>Check the resulting /mnt/etc/fstab file, and edit it in case of errors. </p>
+
+<h4>Chroot</h4>
+
+<p>Change root into the new system:</p>
+
+<pre><code># arch-chroot /mnt</code></pre>
+
+<h4>Time</h4>
+
+<p>Set the time zone:</p>
+
+<pre><code># ln -sf /usr/share/zoneinfo/Region/City /etc/localtime</code></pre>
+
+<p>Run hwclock(8) to generate /etc/adjtime:</p>
+
+<pre><code># hwclock --systohc</code></pre>
+
+<p>This command assumes the hardware clock is set to UTC.</p>
+
+<p>To prevent clock drift and ensure accurate time, set up time synchronization using a Network Time Protocol (NTP) client such as systemd-timesyncd. </p>
+
+<h4>Localization</h4>
+
+<p>Edit /etc/locale.gen and uncomment en_US.UTF-8 UTF-8 and other needed UTF-8 locales. Generate the locales by running:</p>
+
+<pre><code># locale-gen</code></pre>
+
+<p>Create the locale.conf(5) file, and set the LANG variable accordingly:</p>
+
+<pre><code>/etc/locale.conf
+    LANG=en_US.UTF-8
+</code></pre>
+
+<p>If you set the console keyboard layout, make the changes persistent in vconsole.conf(5):</p>
+
+<pre><code>/etc/vconsole.conf</code></pre>
+
+<pre><code>KEYMAP=de-latin1</code></pre>
+
+<h4>Network configuration</h4>
+
+<p>Create the hostname file:</p>
+
+<pre><code>/etc/hostname</code></pre>
+
+<pre><code>yourhostname</code></pre>
+
+<h4>Initramfs (optional)</h4>
+
+<p>Creating a new initramfs is usually not required, because mkinitcpio was run on installation of the kernel package with pacstrap.</p>
+
+<p>For LVM, system encryption or RAID, modify mkinitcpio.conf(5) and recreate the initramfs image: </p>
+
+<pre><code>mkinitpcio -P</code></pre>
+
+<h4>Root password</h4>
+
+<p>Set the root password:</p>
+
+<pre><code># passwd</code></pre>
+
+<h4>Boot Loader</h4>
+
+<p>Choose and install a Linux-capable <a href="tablebootloaders.html">boot loader.</a> </p>
+<p>For UEFI make sure you have efibootmgr installed.</p>
+
+<h3>Desktop Environment.</h3>
+
+<p>Choose and install a capable desktop environment.</p>
+
+<ul>
+    <li>
+      <strong>GNOME</strong>
+      <pre>
+        sudo pacman -S gnome gnome-extra
+        sudo systemctl enable gdm.service
+        sudo systemctl start gdm.service
+      </pre>
+    </li>
+    
+    <li>
+      <strong>KDE Plasma</strong>
+      <pre>
+        sudo pacman -S plasma kde-applications
+        sudo systemctl enable sddm.service
+        sudo systemctl start sddm.service
+      </pre>
+    </li>
+  
+    <li>
+      <strong>Xfce</strong>
+      <pre>
+        sudo pacman -S xfce4 xfce4-goodies
+        sudo systemctl enable lightdm.service
+        sudo systemctl start lightdm.service
+      </pre>
+    </li>
+  
+    <li>
+      <strong>Cinnamon</strong>
+      <pre>
+        sudo pacman -S cinnamon
+        sudo systemctl enable lightdm.service
+        sudo systemctl start lightdm.service
+      </pre>
+    </li>
+  
+    <li>
+      <strong>MATE</strong>
+      <pre>
+        sudo pacman -S mate mate-extra
+        sudo systemctl enable lightdm.service
+        sudo systemctl start lightdm.service
+      </pre>
+    </li>
+  </ul>

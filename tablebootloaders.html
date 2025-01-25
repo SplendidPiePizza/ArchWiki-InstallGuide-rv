@@ -1,0 +1,261 @@
+<style>
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+
+th {
+  background-color: #14004d;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
+
+td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+tr:hover {
+  background-color: #ddd;
+}
+
+
+table, th, td {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+    
+</style>
+
+<table class="wikitable sortable jquery-tablesorter">
+<thead><tr>
+<th rowspan="2" class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Name
+</th>
+<th colspan="2">Firmware
+</th>
+<th colspan="2"><p>Partition table</p>
+
+</th>
+<th rowspan="2" class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Multi-boot
+</th>
+<th rowspan="2" class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending"><p>File systems</p>
+
+</th>
+<th rowspan="2" class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Notes
+</th></tr><tr>
+<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">BIOS</th>
+<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending"><p>UEFI</p>
+
+</th>
+<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending"><p>MBR</p>
+</th>
+<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending"><p>GPT</p>
+
+</th></tr></thead><tbody>
+
+<tr>
+<th><p>Clover</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: inherit; color: inherit; vertical-align: middle; text-align: center;">–
+</td>
+<td>Can emulate UEFI on legacy BIOS systems.
+</td></tr>
+<tr>
+<th><p>EFI boot stub</p>
+
+</th>
+<td data-sort-value="5" style="background: inherit; color: inherit; vertical-align: middle; text-align: center;">–
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>1</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: inherit; color: inherit; vertical-align: middle; text-align: center;">–
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Inherited from firmware<sup>2</sup>
+</td>
+<td>The kernel is a valid EFI executable which can be directly launched from UEFI or from another UEFI boot loader.
+</td></tr>
+<tr>
+<th><p>GRUB</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>3</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;"><p>Built-in</p>
+
+</td>
+<td>Supports RAID, LUKS (but not Argon2 PBKDFs) and LVM (but not thin provisioned volumes). See <p>GRUB</p>
+ for setup-specific limitations.
+</td></tr>
+<tr>
+<th><p>Limine</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Limited</p>
+
+</td>
+<td>
+</td></tr>
+<tr>
+<th><p>rEFInd</p>
+
+</th>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>4</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;"><p>Extensible</p>
+<sup>2,5</sup>
+</td>
+<td>Supports auto-detecting kernels and parameters without explicit configuration, and supports fastboot
+.
+</td></tr>
+<tr>
+<th><p>Syslinux</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Partial</p>
+<sup>1</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Partial</p>
+
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Limited</p>
+
+</td>
+<td>No support for certain file system features.<br>Can only access the file system it was <p>installed to</p>
+.
+</td></tr>
+<tr>
+<th><p>systemd-boot</p>
+
+</th>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>3</sup>
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Manual</p>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>4</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;"><p>Extensible</p>
+<sup>2,5</sup>
+</td>
+<td>Can only launch binaries from the <p>ESP</p>
+ it is installed to or from the Extended Boot Loader Partition (XBOOTLDR partition) on the same disk.<br>Automatically detects <p>unified kernel images</p>
+ placed in <code><i>esp</i>/EFI/Linux/</code>.
+</td></tr>
+<tr>
+<th><p>Unified kernel image</p>
+
+</th>
+<td data-sort-value="5" style="background: inherit; color: inherit; vertical-align: middle; text-align: center;">–
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes<sup>3</sup>
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="5" style="background: inherit; color: inherit; vertical-align: middle; text-align: center;">–
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Inherited from firmware<sup>2</sup>
+</td>
+<td><span class="plainlinks archwiki-template-man" title="$ man 7 systemd-stub"><p>systemd-stub</p>
+</span>, a kernel, initramfs and kernel command line packed into EFI executable to be loaded directly from UEFI firmware or another boot loader.
+</td></tr>
+<tr>
+<th style="background: #ddd; color: inherit; vertical-align: middle; text-align: center;"><p>GRUB Legacy</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Limited</p>
+
+</td>
+<td><p>Discontinued</p>
+ in favor of <p>GRUB</p>
+.
+</td></tr>
+<tr>
+<th style="background: #ddd; color: inherit; vertical-align: middle; text-align: center;"><p>LILO</p>
+
+</th>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="1" style="background: #faa; color: inherit; vertical-align: middle; text-align: center;">No
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Partial</p>
+
+</td>
+<td data-sort-value="5" style="background: #afa; color: inherit; vertical-align: middle; text-align: center;">Yes
+</td>
+<td data-sort-value="3" style="background: #ffa; color: inherit; vertical-align: middle; text-align: center;"><p>Limited</p>
+
+</td>
+<td><p>Discontinued</p>
+ due to limitations (e.g. with Btrfs, GPT, RAID, encryption).
+</td></tr></tbody><tfoot></tfoot></table>
